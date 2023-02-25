@@ -7,7 +7,7 @@ public class EnemyPunchState : MonoBehaviour
     [SerializeField] EnemyBehaviour myBehaviourScript;
     public float yMarginForAttacks;
     private bool canPunch;
-    [SerializeField] float punchingRangeMin, punchingRangeMax;
+    [SerializeField] float punchingRange;
     [SerializeField] private float cooldownLength;
     private Animator anim;
 
@@ -26,17 +26,18 @@ public class EnemyPunchState : MonoBehaviour
         float xDistToPlayer = Mathf.Abs(playerPos.x - transform.position.x);
         float yDistToPlayer = Mathf.Abs(playerPos.y - transform.position.y);
 
-        bool playerInPunchingRange = (xDistToPlayer <= punchingRangeMax && xDistToPlayer >= punchingRangeMin && yDistToPlayer <= yMarginForAttacks); 
+        bool playerInPunchingRange = (xDistToPlayer < punchingRange && yDistToPlayer < yMarginForAttacks); 
 
 
-        if (playerInPunchingRange)
+        if (playerInPunchingRange && canPunch)
         {
             FacePlayer(playerPos.x);
             Punch();
         }
         else
         {
-            Vector2 targetPos = new Vector2(transform.position.x, playerPos.y);
+            float xOffset = punchingRange * transform.localScale.x;
+            Vector2 targetPos = new Vector2(transform.position.x + xOffset, playerPos.y);
             myBehaviourScript.MoveToPosition(targetPos);
         }
     }
