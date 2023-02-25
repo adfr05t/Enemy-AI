@@ -20,13 +20,20 @@ public class EnemyPunchState : MonoBehaviour
 
     public void UpdateState()
     {
+        
+
         Vector3 playerPos = myBehaviourScript.playerTransform.position;
 
         // calc if enemy is within punching distance
         float xDistToPlayer = Mathf.Abs(playerPos.x - transform.position.x);
         float yDistToPlayer = Mathf.Abs(playerPos.y - transform.position.y);
 
-        bool playerInPunchingRange = (xDistToPlayer < punchingRange && yDistToPlayer < yMarginForAttacks); 
+        bool playerInPunchingRange = (xDistToPlayer < punchingRange && yDistToPlayer < yMarginForAttacks);
+
+        if (xDistToPlayer > 4.5)
+        {
+            myBehaviourScript.currentBehaviour = EnemyBehaviour.BehaviourState.Shoot;
+        }
 
 
         if (playerInPunchingRange && canPunch)
@@ -36,8 +43,9 @@ public class EnemyPunchState : MonoBehaviour
         }
         else
         {
-            float xOffset = punchingRange * transform.localScale.x;
-            Vector2 targetPos = new Vector2(transform.position.x + xOffset, playerPos.y);
+            //  float xOffset = punchingRange * transform.localScale.x;
+            //  Vector2 targetPos = new Vector2(transform.position.x + xOffset, playerPos.y);
+            Vector2 targetPos = new Vector2(transform.position.x, playerPos.y);
             myBehaviourScript.MoveToPosition(targetPos);
         }
     }

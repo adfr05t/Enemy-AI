@@ -23,6 +23,17 @@ public class EnemyShootState : MonoBehaviour
     {
         Vector3 playerPos = myBehaviourScript.playerTransform.position;
 
+        float xDistToPlayer = Mathf.Abs(playerPos.x - transform.position.x);
+
+        if (xDistToPlayer < 4.5)
+        {
+            myBehaviourScript.currentBehaviour = EnemyBehaviour.BehaviourState.Punch;
+        }
+        else if (xDistToPlayer > 7)
+        {
+            myBehaviourScript.currentBehaviour = EnemyBehaviour.BehaviourState.NotAttacking;
+        }
+
         if ((transform.position.y > playerPos.y - yMarginForAttacks && transform.position.y < playerPos.y + yMarginForAttacks) && canShoot)
         {
             FacePlayer(playerPos.x);
