@@ -25,18 +25,18 @@ public class EnemyShootState : MonoBehaviour
 
         float xDistToPlayer = Mathf.Abs(playerPos.x - transform.position.x);
 
-        if (xDistToPlayer < 4.5)
+        if (xDistToPlayer < myBehaviourScript.punchingRange)
         {
             myBehaviourScript.currentBehaviour = EnemyBehaviour.BehaviourState.Punch;
         }
-        else if (xDistToPlayer > 7)
+        else if (xDistToPlayer > myBehaviourScript.shootingRange)
         {
-            myBehaviourScript.currentBehaviour = EnemyBehaviour.BehaviourState.NotAttacking;
+            myBehaviourScript.currentBehaviour = EnemyBehaviour.BehaviourState.Patrol;
         }
 
         if ((transform.position.y > playerPos.y - yMarginForAttacks && transform.position.y < playerPos.y + yMarginForAttacks) && canShoot)
         {
-            FacePlayer(playerPos.x);
+            myBehaviourScript.FacePlayer();
             Shoot();
         }
         else
@@ -45,7 +45,6 @@ public class EnemyShootState : MonoBehaviour
             myBehaviourScript.MoveToPosition(targetPos);
         }
     }
-
 
     void Shoot()
     {
@@ -65,22 +64,9 @@ public class EnemyShootState : MonoBehaviour
         StartCoroutine(ShootCooldown());
     }
 
-
     IEnumerator ShootCooldown()
     {
         yield return new WaitForSeconds(cooldownLength);
         canShoot = true;
-    }
-
-    void FacePlayer(float playerXPos)
-    {
-        if (transform.position.x < playerXPos)
-        {
-            transform.localScale = new Vector3(1, 1, 1);
-        }
-        else
-        {
-            transform.localScale = new Vector3(-1, 1, 1);
-        }
     }
 }

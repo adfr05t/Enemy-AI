@@ -4,30 +4,29 @@ using UnityEngine;
 
 public class EnemyBehaviour : MonoBehaviour
 {
-    public enum BehaviourState { NotAttacking, Shoot, Punch };
+    public enum BehaviourState { Patrol, Shoot, Punch };
     public BehaviourState currentBehaviour;
     
     [SerializeField] private EnemyShootState shootState;
     [SerializeField] private EnemyPunchState punchState;
-    [SerializeField] private EnemyNotAttackingState notAttackingState;
-
-    public Transform playerTransform;
-
+    [SerializeField] private EnemyPatrolState notAttackingState;
+    public float shootingRange;
+    public float punchingRange;
     [SerializeField] private float speed;
-
+    public Transform playerTransform;
 
 
     void Start()
     {
         playerTransform = FindObjectOfType<PlayerMovement>().transform;
-      //  currentBehaviour = BehaviourState.NotAttacking;
+        currentBehaviour = BehaviourState.Patrol;
     }
 
     void Update()
     {
         switch (currentBehaviour)
         {
-            case BehaviourState.NotAttacking:
+            case BehaviourState.Patrol:
                 notAttackingState.UpdateState();
                 break;
 
@@ -45,13 +44,10 @@ public class EnemyBehaviour : MonoBehaviour
     {
         transform.position = Vector2.MoveTowards(transform.position, targetPos, speed * Time.deltaTime);
 
-        // Make transform pos z = y for sprite ordering
-        transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.y);
-
         FacePlayer();
     }
 
-    void FacePlayer()
+    public void FacePlayer()
     {
         if (transform.position.x < playerTransform.position.x)
         {

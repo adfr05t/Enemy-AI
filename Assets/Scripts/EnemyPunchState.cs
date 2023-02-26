@@ -20,8 +20,6 @@ public class EnemyPunchState : MonoBehaviour
 
     public void UpdateState()
     {
-        
-
         Vector3 playerPos = myBehaviourScript.playerTransform.position;
 
         // calc if enemy is within punching distance
@@ -34,17 +32,13 @@ public class EnemyPunchState : MonoBehaviour
         {
             myBehaviourScript.currentBehaviour = EnemyBehaviour.BehaviourState.Shoot;
         }
-
-
-        if (playerInPunchingRange && canPunch)
+        else if (playerInPunchingRange && canPunch)
         {
-            FacePlayer(playerPos.x);
+            myBehaviourScript.FacePlayer();
             Punch();
         }
         else
         {
-            //  float xOffset = punchingRange * transform.localScale.x;
-            //  Vector2 targetPos = new Vector2(transform.position.x + xOffset, playerPos.y);
             Vector2 targetPos = new Vector2(transform.position.x, playerPos.y);
             myBehaviourScript.MoveToPosition(targetPos);
         }
@@ -54,7 +48,6 @@ public class EnemyPunchState : MonoBehaviour
     {
         // set anim trigger
         anim.SetTrigger("Punch");
-
         canPunch = false;
         StartCoroutine(PunchCooldown());
     }
@@ -64,17 +57,5 @@ public class EnemyPunchState : MonoBehaviour
     {
         yield return new WaitForSeconds(cooldownLength);
         canPunch = true;
-    }
-
-    void FacePlayer(float playerXPos)
-    {
-        if (transform.position.x < playerXPos)
-        {
-            transform.localScale = new Vector3(1, 1, 1);
-        }
-        else
-        {
-            transform.localScale = new Vector3(-1, 1, 1);
-        }
     }
 }
